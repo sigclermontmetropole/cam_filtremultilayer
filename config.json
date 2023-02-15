@@ -1,0 +1,5 @@
+{
+    "myLayers": "PLU - Prescriptions ponctuelles,PLU - Prescriptions linéaires,PLU - Prescriptions surfaciques",
+    "buttonFilters": [ "PLU Prescriptions TOUTES", "","PLU Prescriptions 18", "TypePrescription = 18", "PLU Prescriptions 39", "TypePrescription = 39", "PLU Prescriptions 07", "TypePrescription = 07"],
+    "vertical": true 
+}
