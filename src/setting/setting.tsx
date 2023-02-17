@@ -13,7 +13,7 @@ const containerCss = css`
 `
 
 interface ExtraProps {
-  myLayers: string;
+  myLayers: string[];
   buttonFilters: string[];
   vertical: boolean;
 }
@@ -49,7 +49,7 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
       id: id,
       config: {
         ...config,
-        myLayers: value
+        myLayers: value.split('\n').map(layerName => layerName.trim() )
         }
     })
   }
@@ -69,7 +69,7 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
   return (
     <div css={containerCss}>
     <Label>
-      Sélectionner le widget carte
+      Select the map to which filtering will be applied
         <MapWidgetSelector
           onSelect={onSelectMap}
           useMapWidgetIds={props.useMapWidgetIds}
@@ -82,20 +82,20 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
       className="mr-2"
       onChange={onCheckBoxDirectionChanged}
     />
-     Menu vertical
+     Vertical menu
     </Label>
 
     <Label>
-     Couches à filtrer (noms des couches séparés par une virgule) : 
-     <TextInput
+     Layers or group layer to be filtered (one line per layer) : 
+     <TextArea
         onAcceptValue={onMyLayersChanged}
-        type="text"
-        defaultValue={props.config.myLayers}
+        defaultValue={props.config.myLayers.join('\n')}
+        height={150}
         />
       </Label>
 
     <Label>
-      Filtres à appliquer : 1 ligne pour le titre du filtre, 1 ligne pour le filtre SQL, et on recommence tant qu'on a des filtres à rajouter
+      Filters : 1 line for button title, 1 line for SQL filter related to this button, and so on
       <TextArea 
           onAcceptValue={onButtonFiltersChanged}
           defaultValue={props.config.buttonFilters.join('\n')}

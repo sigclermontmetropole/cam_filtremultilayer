@@ -1,7 +1,7 @@
 import { ImmutableObject } from 'seamless-immutable'
 
 export interface Config {
-    myLayers: string,
+    myLayers: string[],
     buttonFilters: string[],
     vertical: boolean
 }
