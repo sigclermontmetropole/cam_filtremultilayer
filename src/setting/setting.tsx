@@ -19,7 +19,6 @@ const containerCss = css`
 interface ExtraProps {
   buttonFilters: string[];
   vertical: boolean;
-  dsJsons: ImmutableObject<{ [dsId: string]: DataSourceJson }>;
 }
 
 export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraProps) {
