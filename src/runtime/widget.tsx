@@ -42,7 +42,6 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
     setSelectedFilter(index); 
 
     //selected datasources
-    console.log("   DEBUG : " + JSON.stringify( props ));
     for (var i=0; i<props.useDataSources.length; i++) {
         // console.log("   DEBUG : " + JSON.stringify( props.useDataSources[i] ) )
         //filter
@@ -54,47 +53,6 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
         ds.updateQueryParams( query, props.id)
     }
     return;
-
-    /** deprecated 
-     * 
-    const layers = jmv.view.map.allLayers;
-    const pAll = Promise.all(layers.filter((layer) => {
-      //return layer.type === 'feature' ;
-      //Couche d'entité dont le nom est dans la liste des couches souhaitées
-      //console.log("DEBUG LAYER concerné ? " + layer.title 
-       // + (layer.type == 'feature' && props.config.myLayers.split(',').includes(layer.title) ) ) ; 
-      return (props.config.myLayers.includes(layer.title) ) ;
-        
-    })
-      .map(async (layer): Promise<String> => {
-        console.log("      DEBUG : filtered layer : " + layer.title + " of type " + layer.type ) ;
-        if (layer.type == 'feature') {
-          const fl = layer as FeatureLayer;
-          console.log("           DEBUG feature layer - SQL filter before change = " + fl.definitionExpression)
-          fl.definitionExpression = props.config.buttonFilters[index * 2 + 1] ; 
-        }
-        // groupe de feature layer
-        else if (layer.type == 'group') {
-          const group = layer as GroupLayer
-          group.layers.filter( (layer) => { return (layer.type == 'feature') } )
-            .map( (fl:FeatureLayer) => {
-              console.log("             DEBUG : filtered sublayer : " + layer.title ) ;
-              fl.definitionExpression = props.config.buttonFilters[index * 2 + 1] ; 
-            } )
-        }
-        // groupe image layer
-        else if (layer.type == 'map-image') {
-          const group = layer as MapImageLayer
-          group.allSublayers.filter( (layer) => { return true } )
-            .map( (fl:Sublayer) => {
-              console.log("             DEBUG : filtered mapimage sublayer  : " + layer.title ) ;
-              fl.definitionExpression = props.config.buttonFilters[index * 2 + 1] ; 
-            } )
-        }
-
-        return 'OK';
-      }))
-      */
 
   }
 
