@@ -1,10 +1,9 @@
 import { ImmutableObject } from 'seamless-immutable'
 
 export interface Config {
-    myLayers: string[],
     buttonFilters: string[],
     vertical: boolean,
-    dataSourceIds: string[]
+    dsJsons: string[]
 }
 
 export type IMConfig = ImmutableObject<Config>

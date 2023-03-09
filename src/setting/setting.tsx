@@ -17,8 +17,6 @@ const containerCss = css`
 
 // settings interfaces
 interface ExtraProps {
-  myLayers: string[];  //perime a supprimer
-  dataSourceIds: string[]; //perime a supprimer
   buttonFilters: string[];
   vertical: boolean;
   dsJsons: ImmutableObject<{ [dsId: string]: DataSourceJson }>;
@@ -27,11 +25,6 @@ interface ExtraProps {
 export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraProps) {
 
   const { onSettingChange, id, config, useDataSources } = props
-
-  // datasource selector param
-  const supportedDsTypes = Immutable([AllDataSourceTypes.FeatureLayer])
-  const [dss, setDss] = useState<DataSource[]>(null)
-  const [useDss, setUseDss] = useState<ImmutableArray<UseDataSource>>(props.useDataSources)
 
   const onSelectMap = (useMapWidgetIds: string[]) => {
     onSettingChange({
@@ -51,18 +44,6 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
         }
     })    
 
-  }
-
-  // changement parametre
-  const onMyLayersChanged = ( value: string) => {
-    // Save the parameter to config 
-    onSettingChange({
-      id: id,
-      config: {
-        ...config,
-        myLayers: value.split('\n').map(layerName => layerName.trim() )
-        }
-    })
   }
 
   // changement parametre (1 ligne par valeur du tableau de chaine)
@@ -121,16 +102,6 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
         widgetId={props.id}
         hideAddDataButton={true}
     />
-    <TextArea defaultValue = {props.config.dataSourceIds.join('\n')} />
-
-    <Label>
-     Layers or group layer to be filtered (one line per layer) : 
-     <TextArea
-        onAcceptValue={onMyLayersChanged}
-        defaultValue={props.config.myLayers.join('\n')}
-        height={150}
-        />
-      </Label>
 
     <Label>
       Filters : 1 line for button title, 1 line for SQL filter related to this button, and so on

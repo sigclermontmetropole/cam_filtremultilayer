@@ -55,6 +55,8 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
     }
     return;
 
+    /** deprecated 
+     * 
     const layers = jmv.view.map.allLayers;
     const pAll = Promise.all(layers.filter((layer) => {
       //return layer.type === 'feature' ;
@@ -92,6 +94,8 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
 
         return 'OK';
       }))
+      */
+
   }
 
   useEffect(() => {
