@@ -1,9 +1,9 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
-import { AllWidgetProps, IMState, css, jsx, React } from 'jimu-core'
+import { AllWidgetProps, IMState, css, jsx, React, SqlQueryParams, DataSourceManager } from 'jimu-core'
 import { useEffect, useRef, useState } from 'react'
 import { IMConfig } from '../config'
-import { JimuMapView, JimuMapViewComponent } from 'jimu-arcgis'
+import { FeatureLayerDataSource, JimuMapView, JimuMapViewComponent } from 'jimu-arcgis'
 import { Label, Button, ButtonGroup } from 'jimu-ui'
 import FeatureLayer from 'esri/layers/FeatureLayer'
 import GroupLayer from 'esri/layers/GroupLayer'
@@ -44,7 +44,14 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
     //selected datasources
     console.log("   DEBUG : " + JSON.stringify( props ));
     for (var i=0; i<props.useDataSources.length; i++) {
-        console.log("   DEBUG : " + JSON.stringify( props.useDataSources[i] ) )
+        // console.log("   DEBUG : " + JSON.stringify( props.useDataSources[i] ) )
+        //filter
+        var query: SqlQueryParams = {
+          where: props.config.buttonFilters[index * 2 + 1]
+        };
+        //apply filter to dataSource
+        var ds = DataSourceManager.getInstance().getDataSource(props.useDataSources[i].dataSourceId) as FeatureLayerDataSource;
+        ds.updateQueryParams( query, props.id)
     }
     return;
 
