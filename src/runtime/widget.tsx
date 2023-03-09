@@ -33,7 +33,6 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
   }
 
   const renderData = () => {
-
     return <label>  Tableau complet : {props.config.buttonFilters.join('\n')} </label>
   }
 
@@ -41,10 +40,18 @@ export default function Widget (props: AllWidgetProps<IMConfig> ) {
   // https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html#definitionExpression
   const setFilter = (event, index) => {
     setSelectedFilter(index); 
-    const layers = jmv.view.map.allLayers
+
+    //selected datasources
+    console.log("   DEBUG : " + JSON.stringify( props ));
+    for (var i=0; i<props.useDataSources.length; i++) {
+        console.log("   DEBUG : " + JSON.stringify( props.useDataSources[i] ) )
+    }
+    return;
+
+    const layers = jmv.view.map.allLayers;
     const pAll = Promise.all(layers.filter((layer) => {
       //return layer.type === 'feature' ;
-      //Couche d'entité dont le nom est dans la liste des couches souhaitée
+      //Couche d'entité dont le nom est dans la liste des couches souhaitées
       //console.log("DEBUG LAYER concerné ? " + layer.title 
        // + (layer.type == 'feature' && props.config.myLayers.split(',').includes(layer.title) ) ) ; 
       return (props.config.myLayers.includes(layer.title) ) ;
