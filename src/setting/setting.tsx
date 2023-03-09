@@ -1,9 +1,12 @@
 /** @jsx jsx */
 import { AllWidgetSettingProps } from 'jimu-for-builder'
 import { MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
+import { DataSourceSelector } from 'jimu-ui/advanced/data-source-selector'
+import { useEffect, useRef, useState } from 'react'
 import { IMConfig } from '../config'
 import { Label, TextInput, TextArea, Checkbox } from 'jimu-ui'
-import { jsx, css } from 'jimu-core'
+import { jsx, css, DataSource, UseDataSource, ImmutableArray, Immutable, AllDataSourceTypes, ImmutableObject, DataSourceJson } from 'jimu-core'
+import { FeatureLayerDataSource } from 'jimu-arcgis'
 
 const containerCss = css`
   display: flex;
@@ -12,15 +15,23 @@ const containerCss = css`
 }
 `
 
+// settings interfaces
 interface ExtraProps {
-  myLayers: string[];
+  myLayers: string[];  //perime a supprimer
+  dataSourceIds: string[]; //perime a supprimer
   buttonFilters: string[];
   vertical: boolean;
+  dsJsons: ImmutableObject<{ [dsId: string]: DataSourceJson }>;
 }
 
 export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraProps) {
 
   const { onSettingChange, id, config, useDataSources } = props
+
+  // datasource selector param
+  const supportedDsTypes = Immutable([AllDataSourceTypes.FeatureLayer])
+  const [dss, setDss] = useState<DataSource[]>(null)
+  const [useDss, setUseDss] = useState<ImmutableArray<UseDataSource>>(props.useDataSources)
 
   const onSelectMap = (useMapWidgetIds: string[]) => {
     onSettingChange({
@@ -66,6 +77,31 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
     })
   }  
 
+  // changement des sources de données
+  const onSelectedDsChange = useDss => {
+
+    setUseDss(Immutable(useDss));
+
+    // console.log( "DEBUG ds datasource = " + JSON.stringify( useDss) );
+
+    var dsIds : string[] = [] ;
+    for (var i=0; i<useDss.length; i++) {
+      console.log("   debug : " + useDss[i].dataSourceId)
+      dsIds[i] = useDss[i].dataSourceId;
+    }
+
+      // Save the parameter to config 
+      onSettingChange({
+        id: id,
+        config: {
+          ...config,
+          dataSourceIds : dsIds
+        }
+      })
+
+  }
+
+
   return (
     <div css={containerCss}>
     <Label>
@@ -84,6 +120,16 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
     />
      Vertical menu
     </Label>
+
+    <DataSourceSelector
+        types={Immutable([AllDataSourceTypes.FeatureLayer])}
+        useDataSourcesEnabled mustUseDataSource
+        isMultiple={true}
+        useDataSources={useDss}
+        onChange={onSelectedDsChange}
+        hideAddDataButton={true}
+    />
+    <TextArea defaultValue = {props.config.dataSourceIds.join('\n')} />
 
     <Label>
      Layers or group layer to be filtered (one line per layer) : 
