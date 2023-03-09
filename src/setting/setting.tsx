@@ -78,26 +78,17 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
   }  
 
   // changement des sources de données
-  const onSelectedDsChange = useDss => {
+  const onDataSourceChange = (useDataSources: UseDataSource[]) => {
 
-    setUseDss(Immutable(useDss));
+    if (!useDataSources) {
+      return;
+    }    
 
-    // console.log( "DEBUG ds datasource = " + JSON.stringify( useDss) );
-
-    var dsIds : string[] = [] ;
-    for (var i=0; i<useDss.length; i++) {
-      console.log("   debug : " + useDss[i].dataSourceId)
-      dsIds[i] = useDss[i].dataSourceId;
-    }
-
-      // Save the parameter to config 
-      onSettingChange({
-        id: id,
-        config: {
-          ...config,
-          dataSourceIds : dsIds
-        }
-      })
+    props.onSettingChange({
+      id: props.id,
+      config: config,
+      useDataSources: useDataSources
+    })
 
   }
 
@@ -125,8 +116,9 @@ export default function Setting(props: AllWidgetSettingProps<IMConfig> & ExtraPr
         types={Immutable([AllDataSourceTypes.FeatureLayer])}
         useDataSourcesEnabled mustUseDataSource
         isMultiple={true}
-        useDataSources={useDss}
-        onChange={onSelectedDsChange}
+        useDataSources={props.useDataSources}
+        onChange={onDataSourceChange}
+        widgetId={props.id}
         hideAddDataButton={true}
     />
     <TextArea defaultValue = {props.config.dataSourceIds.join('\n')} />
